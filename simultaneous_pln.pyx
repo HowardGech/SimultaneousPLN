@@ -23,41 +23,49 @@ cdef class SimultaneousPLN:
     cdef list EBIC_sample  # EBIC for each sample
     cdef double EBIC  # Overall EBIC
 
-    def __init__(self, list y, list Omega_init = [], list mu_init=[], list sigma_init=[], Offset=None, z=None):
+    def __init__(self, list y, Offset=None, z=None):
         """
         Initialize the Simultaneous PLN model parameters.
 
         Parameters:
         y          : Observed count data (list of np.ndarray for each sample group).
-        Omega_init : Initial estimate of the precision matrix (list of np.ndarray for each sample group).
-        mu_init    : Initial estimate of the mean for the variational distribution (list of np.ndarray for each sample group).
-        sigma_init : Initial estimate of the variance for the variational distribution (list of np.ndarray for each sample group).
         Offset     : Optional offset matrix (default is None).
         z          : Optional covariate matrix (default is None).
         """
         self.y = y
-        self.Omega = [np.copy(Omega_init[i]) for i in range(len(Omega_init))]
-        self.mu = [np.copy(mu_init[i]) for i in range(len(mu_init))]
-        self.sigma = [np.copy(sigma_init[i]) for i in range(len(sigma_init))]
         self.Offset = Offset
         self.z = z
         self.EBIC_sample = []
         self.EBIC = 0.0
+        self.Omega = []
+        self.mu = []
+        self.sigma = []
 
-    def initialize(self):
+    def initialize(self, list Omega_init = [], list mu_init=[], list sigma_init=[]):
         """
-        Initialize the model parameters if not provided.
+        Initialize the model parameters if not provided. Leave empty for default initialization.
+
+        Parameters:
+        Omega_init : Initial estimate of the precision matrix (list of np.ndarray for each sample group).
+        mu_init    : Initial estimate of the mean for the variational distribution (list of np.ndarray for each sample group).
+        sigma_init : Initial estimate of the variance for the variational distribution (list of np.ndarray for each sample group).
         """
         # Initialize Omega, mu, and sigma if they are None
         cdef int p = self.y[0].shape[1]
         cdef int n = self.y[0].shape[0]
         cdef int I = len(self.y)
-        if not self.mu:
+        if not mu_init:
             self.mu = [np.log(self.y[i]+0.5) for i in range(I)]
-        if not self.sigma:
+        else:
+            self.mu = [np.copy(mu_init[i]) for i in range(I)]
+        if not sigma_init:
             self.sigma = [np.repeat([np.repeat(1.1,p)],n,axis=0) for _ in range(I)]
-        if not self.Omega:
+        else:
+            self.sigma = [np.copy(sigma_init[i]) for i in range(I)]
+        if not Omega_init:
             self.Omega = [np.linalg.inv(np.cov(self.mu[i].T))  for i in range(I)]
+        else:
+            self.Omega = [np.copy(Omega_init[i]) for i in range(I)]
         
     def compute(self, list Omega, list y, list mu_init, list sigma_init, Offset=None, z=None, 
                 double pi=0.5, double rho=0.5, double v1=0.5, double v0=0.05, double tau=10, 
