@@ -43,4 +43,4 @@ Fit the model by:
 model.fit()
 ```
 
-For more package details, please refer to `example.py` file.
+For more package details, please refer to `example.py`.
