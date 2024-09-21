@@ -67,7 +67,8 @@ You can customize the fitting preferences, such as the maximum number of iterati
 # Example
 For more detailed usage and examples, please refer to example.py included in the package.
 
-## References
+# References
 
 --- 
-bibliography: reference.bib
+>Ge, C. and H. Li (2024). _Simultaneous estimation of many sparse networks via hierarchical poisson log-normal model._ [arxiv.org/abs/2409.12275](https://arxiv.org/abs/2409.12275)
+>Jason Laska, Manjari Narayan, 2017. _skggm 0.2.7: A scikit-learn compatible package for Gaussian and related Graphical Models._ doi:10.5281/zenodo.830033
