@@ -70,6 +70,6 @@ For more detailed usage and examples, please refer to example.py included in the
 # References
 
 --- 
->Ge, C. and H. Li (2024). _Simultaneous estimation of many sparse networks via hierarchical poisson log-normal model._ [arxiv.org/abs/2409.12275](https://arxiv.org/abs/2409.12275)
+>Changhao Ge, Hongzhe Li, 2024. _Simultaneous estimation of many sparse networks via hierarchical poisson log-normal model._ [arxiv.org/abs/2409.12275](https://arxiv.org/abs/2409.12275)
 
 >Jason Laska, Manjari Narayan, 2017. _skggm 0.2.7: A scikit-learn compatible package for Gaussian and related Graphical Models._ [doi:10.5281/zenodo.830033](https://doi.org/10.5281/zenodo.830033)
