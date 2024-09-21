@@ -66,3 +66,8 @@ You can customize the fitting preferences, such as the maximum number of iterati
 
 # Example
 For more detailed usage and examples, please refer to example.py included in the package.
+
+## References
+
+--- 
+bibliography: reference.bib
