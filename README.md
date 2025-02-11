@@ -1,4 +1,4 @@
-# SimultaneousPLN<img src="src/image.svg" align="right" width="155"/>
+# SimultaneousPLN<img src="icon.svg" align="right" width="155"/>
 
 This is the Python implementation of the manuscript *"Simultaneous Estimation of Many Sparse Networks via Hierarchical Poisson Log-Normal Model"*. The package requires [multiprocessing](https://docs.python.org/3/library/multiprocessing.html) and [skggm](https://github.com/skggm/skggm) as dependencies. Please ensure that these prerequisites are properly installed.
 
