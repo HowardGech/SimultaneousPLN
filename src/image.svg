@@ -3,7 +3,7 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 68 78.5" style="enable-background:new 0 0 68 78.5;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FFFFFF;stroke:#004369;stroke-width:1.5;stroke-miterlimit:10;}
+	.st0{fill:#EAEAE0;stroke:#0C6170;stroke-width:1.75;stroke-miterlimit:10;}
 	.st1{opacity:0.8;}
 	.st2{fill:none;stroke:#4A90E2;stroke-width:2;}
 	.st3{fill:#4A90E2;}
@@ -13,8 +13,8 @@
 	.st7{opacity:0.4;}
 	.st8{fill:none;stroke:#00C3FF;stroke-width:2;}
 	.st9{fill:#00C3FF;}
-	.st10{fill:#004369;}
-	.st11{font-family:'MyriadPro-Regular';}
+	.st10{fill:#0C6170;}
+	.st11{font-family:'Helvetica-Oblique';}
 	.st12{font-size:12px;}
 </style>
 <polygon class="st0" points="0.8,20.1 0.8,58.4 34,77.6 67.2,58.4 67.2,20.1 34,0.9 "/>
@@ -33,11 +33,11 @@
 	<circle class="st6" cx="30.4" cy="53.9" r="2.5"/>
 </g>
 <g transform="rotate(-15 50 50)" class="st7">
-	<path class="st8" d="M28.6,30.6c6.7-6.7,13.3-6.7,20,0s3.3,10-10,10S21.9,37.3,28.6,30.6"/>
+	<path class="st8" d="M28.6,30.6c6.7-6.7,13.3-6.7,20,0s3.3,10-10,10C25.3,40.6,21.9,37.3,28.6,30.6"/>
 	<circle class="st9" cx="28.6" cy="30.6" r="2"/>
 	<circle class="st9" cx="48.6" cy="30.6" r="2"/>
 	<circle class="st9" cx="38.6" cy="20.6" r="2"/>
 	<circle class="st9" cx="38.6" cy="40.6" r="2"/>
 </g>
-<text transform="matrix(1 0 0 1 21.0501 67.7585)" class="st10 st11 st12">SPLN</text>
+<text transform="matrix(1 0 0 1 17.8721 67.7585)" class="st10 st11 st12">SPLN</text>
 </svg>
