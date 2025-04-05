@@ -15,9 +15,11 @@ if platform.system() == "Darwin":
 
 else:
     include_dirs = [numpy.get_include(), "/usr/local/include"]
-    extra_compile_args = ["-msse2", "-O2", "-fPIC", "-w",'-fopenmp']
+    extra_compile_args = ["-O2", "-fPIC", "-w",'-fopenmp']
     extra_link_args = ["-llapack",'-fopenmp']
 
+if platform.machine() in ("x86_64", "AMD64"):
+    extra_compile_args.append("-msse2")
 
 ext_modules = [
     Extension(
