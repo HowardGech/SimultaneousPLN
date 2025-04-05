@@ -21,6 +21,8 @@ export CC=/usr/local/opt/llvm/bin/clang
 export CXX=/usr/local/opt/llvm/bin/clang++
 ```
 
+A [docker](https://www.docker.com/) container of jupyter notebook can be constructed from the `Dockerfile`.
+
 ### Adding to System PATH
 
 If you want to add the SimultaneousPLN package to your system `PYTHONPATH`, run:
