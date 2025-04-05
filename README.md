@@ -1,6 +1,6 @@
 # SimultaneousPLN<img src="src/icon.svg" align="right" width="155"/>
 
-This is the Python implementation of the manuscript *"Simultaneous Estimation of Many Sparse Networks via Hierarchical Poisson Log-Normal Model"*. The package requires [multiprocessing](https://docs.python.org/3/library/multiprocessing.html) and [skggm](https://github.com/skggm/skggm) as dependencies. Please ensure that these prerequisites are properly installed.
+This is the Python implementation of the manuscript *"Simultaneous Estimation of Many Sparse Networks via Hierarchical Poisson Log-Normal Model"*. 
 
 ## Installation
 
@@ -13,6 +13,13 @@ To install and use this package, follow these steps:
     ```bash
     python setup.py build_ext --inplace
     ```
+
+Note: this package requires `openmp` for multithread processing, which is not supported on apple's `llvm`. If you're using macOS, you may install brew's `llvm` and set the corresponding reference before installing this package:
+```bash
+brew install llvm libomp
+export CC=/usr/local/opt/llvm/bin/clang
+export CXX=/usr/local/opt/llvm/bin/clang++
+```
 
 ### Adding to System PATH
 
@@ -27,7 +34,7 @@ Make sure to replace `/path/to/SimultaneousPLN` with the actual path to your Sim
 ### Import the package
 To use the SimultaneousPLN package, import it as follows:
 ```python
-from simultaneous_pln import SimultaneousPLN
+from simultaneous_pln import SimultaneousPLN as spln
 ```
 ### Prepare the Data
 
@@ -42,27 +49,26 @@ Ensure that the number of columns (features) is the same across all arrays withi
 You can construct the model as follows:
 
 ```python
-model = SimultaneousPLN(y, Offset, z)
+model = spln(y, Offset, z)
 ```
 Where:
 - `y`: List of 2D arrays representing count data.
 - `Offset`: List of 2D arrays representing the offset.
 - `z`: List of 2D arrays representing covariates.
-To initialize the model parameters, use:
 
-```python
-model.initialize()
-```
-If you prefer to define your own initialization for the parameters, you can pass them as arguments:
-```python
-model.initialize(Omega_init, mu_init, sigma_init)
-```
+The model will be initiaialized accordingly. You can also indlude the initialization of model parameters if you prefer to define them by yourself.
+
 ## Fit the Model
 To fit the model, simply call:
 ```python
 model.fit()
 ```
 You can customize the fitting preferences, such as the maximum number of iterations and multiprocessing options, by passing them as arguments. For more details, call `help(model.fit)`.
+
+For hyperparameter determination and model selection by AIC, BIC and EBIC measurements, you may use:
+```python
+model.ModelSelect()
+```
 
 # Example
 For more detailed usage and examples, please refer to example.py included in the package.
@@ -71,5 +77,3 @@ For more detailed usage and examples, please refer to example.py included in the
 
 --- 
 >Changhao Ge, Hongzhe Li, 2024. _Simultaneous estimation of many sparse networks via hierarchical poisson log-normal model._ [arxiv.org/abs/2409.12275](https://arxiv.org/abs/2409.12275)
-
->Jason Laska, Manjari Narayan, 2017. _skggm 0.2.7: A scikit-learn compatible package for Gaussian and related Graphical Models._ [doi:10.5281/zenodo.830033](https://doi.org/10.5281/zenodo.830033)
