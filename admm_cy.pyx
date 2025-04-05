@@ -1,58 +1,45 @@
 cimport numpy as cnp
+cimport cython
 import numpy as np
 from libc.stdlib cimport malloc, free
+from cython.parallel cimport prange
+
 cdef extern from "admm.h":
-    void update_mu(double* mu_M, double* mu_N, double* y, double* sigma, double** ridge_inv, double* log_diff, int p, double* alpha, double rho, int max_iter, int min_iter, double alpha_init, double eps)
-    void update_sigma(double* Sigma, double** Omega, double* mu, int p)
+    void update_mu(double* mu_M, double* y, double* sigma, double* ridge_inv, double* log_diff, int p, double rho, int max_iter, int min_iter, double alpha_init, double mu_lowbound, double mu_highbound, double eps ) nogil
+    void update_sigma(double* Sigma, double* Omega, double* mu, int p, int max_iter, double sigma_lowbound, double sigma_highbound, double eps) nogil
 
-# Cython wrapper for update_mu
-def update_mu_py(cnp.ndarray[double, ndim=1] mu, cnp.ndarray[double, ndim=1] y, cnp.ndarray[double, ndim=1] sigma, cnp.ndarray[double, ndim=2] ridge_inv, cnp.ndarray[double, ndim=1] log_diff, double rho, int max_iter=100, int min_iter=10, double alpha_init=0, double eps=1e-4):
-    cdef int p = y.shape[0]
-    cdef double* mu_M = <double*>malloc(p * sizeof(double))
-    cdef double* mu_N = <double*>malloc(p * sizeof(double))
-    cdef double* alpha = <double*>malloc(p * sizeof(double))
+def update_py(double[:, :] mu, double[:, :] y, double[:, :] sigma, double[:, :] Omega, double[:, :] ridge_inv, double[:, :] log_diff, double rho, int max_iter, int min_iter, double alpha_init, double eps, double mu_lowbound, double mu_highbound, double sigma_lowbound, double sigma_highbound):
+    cdef int p = y.shape[1]
+    cdef int n = y.shape[0]
+    cdef Py_ssize_t i
     
-    # Convert ridge_inv to C array
-    cdef double** ridge_inv_c = <double**>malloc(p * sizeof(double*))
-    for i in range(p):
-        ridge_inv_c[i] = &ridge_inv[i, 0]
-    
-    # Initialize mu_M and mu_N
-    for i in range(p):
-        mu_M[i] = mu[i]
-        mu_N[i] = mu[i]
-    # Call the C function
-    update_mu(mu_M, mu_N, &y[0], &sigma[0], ridge_inv_c, &log_diff[0], p, alpha, rho, max_iter, min_iter, alpha_init, eps)
+    for i in range(n):
+        update_mu(&mu[i,0], &y[i,0], &sigma[i,0], &ridge_inv[0,0], &log_diff[i,0], p, rho, max_iter, min_iter, alpha_init, mu_lowbound, mu_highbound, eps)
+        
+    for i in range(n):
+        update_sigma(&sigma[i,0], &Omega[0,0], &mu[i,0], p, max_iter, sigma_lowbound, sigma_highbound, eps)
 
-    # Convert result back to NumPy array
-    result = np.array([mu_M[i] for i in range(p)])
+    return
 
-    # Free allocated memory
-    free(mu_M)
-    free(mu_N)
-    free(alpha)
-    free(ridge_inv_c)
 
-    return result
 
-# Cython wrapper for update_sigma
-def update_sigma_py(cnp.ndarray[double, ndim=2] Omega, cnp.ndarray[double, ndim=1] mu):
-    cdef int p = mu.shape[0]
-    cdef double* Sigma = <double*>malloc(p * sizeof(double))
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def update_py_par(double[:, :] mu, double[:, :] y, double[:, :] sigma, double[:, :] Omega, double[:, :] ridge_inv, double[:, :] log_diff, double rho, int max_iter, int min_iter, double alpha_init, double eps, double mu_lowbound, double mu_highbound, double sigma_lowbound, double sigma_highbound, int threads=0):
+    cdef int p = y.shape[1]
+    cdef int n = y.shape[0]
+    cdef Py_ssize_t i
 
-    # Convert Omega to C array
-    cdef double** Omega_c = <double**>malloc(p * sizeof(double*))
-    for i in range(p):
-        Omega_c[i] = &Omega[i, 0]
+    if threads == 0:           
+        for i in prange(n, nogil=True):
+            update_mu(&mu[i,0], &y[i,0], &sigma[i,0], &ridge_inv[0,0], &log_diff[i,0], p, rho, max_iter, min_iter, alpha_init, mu_lowbound, mu_highbound, eps)
+        for i in prange(n, nogil=True):
+            update_sigma(&sigma[i,0], &Omega[0,0], &mu[i,0], p, max_iter, sigma_lowbound, sigma_highbound, eps)
+    else:
+        for i in prange(n, nogil=True, num_threads=threads):
+            update_mu(&mu[i,0], &y[i,0], &sigma[i,0], &ridge_inv[0,0], &log_diff[i,0], p, rho, max_iter, min_iter, alpha_init, mu_lowbound, mu_highbound, eps)
+        for i in prange(n, nogil=True, num_threads=threads):
+            update_sigma(&sigma[i,0], &Omega[0,0], &mu[i,0], p, max_iter, sigma_lowbound, sigma_highbound, eps)
 
-    # Call the C function
-    update_sigma(Sigma, Omega_c, &mu[0], p)
 
-    # Convert result back to NumPy array
-    result = np.array([Sigma[i] for i in range(p)])
-
-    # Free allocated memory
-    free(Sigma)
-    free(Omega_c)
-
-    return result
+    return
