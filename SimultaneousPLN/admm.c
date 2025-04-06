@@ -17,25 +17,6 @@ static double L2_opt(double y, double sigma, double alpha, double rho, double mu
     double x = init, diff = 10.0, temp;
     int count = 0;
     
-    // if (L2_der(low_bound, y, sigma, alpha, rho, mu_N) >= 0.0) {
-    //     return low_bound;
-    // }
-    // if (L2_der(high_bound, y, sigma, alpha, rho, mu_N) <= 0.0) {
-    //     return high_bound;
-    // }
-
-    // while (diff > tol && count < max_iter) {
-    //     count++;
-    //     temp = L2_der((a + b) / 2.0, y, sigma, alpha, rho, mu_N);
-    //     if (temp > 0.0) {
-    //         b = (a + b) / 2.0;
-    //     } else {
-    //         a = (a + b) / 2.0;
-    //     }
-    //     diff = fabs(temp);
-    // }
-    // return (a + b) / 2.0;
-
     // Newton's method for finding the root
     while (diff > tol && count < max_iter) {
         count++;
@@ -47,7 +28,7 @@ static double L2_opt(double y, double sigma, double alpha, double rho, double mu
         }
         diff = fabs(L2_der(x, y, sigma, alpha, rho, mu_N));
     }
-    return x; // return the optimal mu
+    return x;
 
 }
 

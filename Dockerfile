@@ -21,7 +21,7 @@ RUN pip3 install jupyter \
 
 COPY . .
 
-RUN python3 setup.py build_ext --inplace
+RUN pip3 install .
 
 RUN useradd -m -s /bin/bash jupyteruser
 # Switch to the non-root user

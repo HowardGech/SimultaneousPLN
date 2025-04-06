@@ -1,16 +1,14 @@
 # cython: language_level=3, boundscheck=False, wraparound=False
 cimport numpy as cnp
 from libc.stdlib cimport malloc, free
-# from admm_cy import update_mu_py, update_sigma_py
 from scipy.special import gammaln
 import numpy as np
 import logging
-from admm_cy import update_py_par, update_py
-from pyquic import quic, quic_par
+from SimultaneousPLN.admm_cy import update_py_par, update_py
+from SimultaneousPLN.pyquic import quic, quic_par
 from collections import defaultdict
-# from pyquic import quic_py_par, quic_py
 logging.basicConfig(level=logging.INFO)
-class SimultaneousPLN:
+class SPLN:
     """
     Class to perform Simultaneous Poisson Log-Normal (PLN) model fitting
     using ADMM optimization and graphical lasso for precision matrix estimation.
