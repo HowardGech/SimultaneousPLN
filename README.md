@@ -6,12 +6,12 @@ This is the Python implementation of the manuscript *"Simultaneous Estimation of
 
 To install and use this package, follow these steps:
 
-1. Download and unzip the package.
+1. Download and unzip the package, or clone the git repo.
 2. Navigate to the folder (e.g., `SimultaneousPLN`).
 3. Build the package using the following command:
 
     ```bash
-    python setup.py build_ext --inplace
+    pip install .
     ```
 
 Note: this package requires `openmp` for multithread processing, which is not supported on apple's `llvm`. If you're using macOS, you may install brew's `llvm` and set the corresponding reference before installing this package:
@@ -23,20 +23,11 @@ export CXX=/usr/local/opt/llvm/bin/clang++
 
 A [docker](https://www.docker.com/) container of jupyter notebook can be constructed from the `Dockerfile`.
 
-### Adding to System PATH
-
-If you want to add the SimultaneousPLN package to your system `PYTHONPATH`, run:
-
-```bash
-export PYTHONPATH=/path/to/SimultaneousPLN:$PYTHONPATH
-```
-Make sure to replace `/path/to/SimultaneousPLN` with the actual path to your SimultaneousPLN folder.
-
 ## Usage
 ### Import the package
 To use the SimultaneousPLN package, import it as follows:
 ```python
-from simultaneous_pln import SimultaneousPLN as spln
+from SimultaneousPLN import SPLN
 ```
 ### Prepare the Data
 
@@ -51,7 +42,7 @@ Ensure that the number of columns (features) is the same across all arrays withi
 You can construct the model as follows:
 
 ```python
-model = spln(y, Offset, z)
+model = SPLN(y, Offset, z)
 ```
 Where:
 - `y`: List of 2D arrays representing count data.
