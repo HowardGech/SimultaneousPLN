@@ -27,7 +27,7 @@ A [docker](https://www.docker.com/) container of jupyter notebook can be constru
 ### Import the package
 To use the SimultaneousPLN package, import it as follows:
 ```python
-from SimultaneousPLN import SPLN
+import SimultaneousPLN as SimPLN
 ```
 ### Prepare the Data
 
@@ -37,12 +37,24 @@ Prepare your count data, offset, and covariates for different groups as lists of
 
 Ensure that the number of columns (features) is the same across all arrays within the lists. The count data and offset for each group must have the exact same dimensions.
 
+An example pipeline for generating simulation data is provided in the package:
+```python
+# generating adjacency matrices
+As = SimPLN.generate_graph("ErdosRenyi", "ErdosRenyi", nodes=80, groups=30, common_p=0.1, p=0.8)
+# generating precision matrix element values
+values = [SimPLN.generate_value_uniform(nodes=80) for _ in range(30)]
+# construct sparse precision matrices
+Omegas = [SimPLN.sparse_Omega(As[i],values[i]) for i in range(30)]
+# generate count data from PLN model
+y = [SimPLN.generate_PLN(Omegas[i], nsample=200) for i in range(30)]
+```
+
 ### Model Construction
 
 You can construct the model as follows:
 
 ```python
-model = SPLN(y, Offset, z)
+model = SimPLN.SPLN(y, Offset, z)
 ```
 Where:
 - `y`: List of 2D arrays representing count data.
@@ -64,7 +76,7 @@ model.ModelSelect()
 ```
 
 # Example
-For more detailed usage and examples, please refer to example.py included in the package.
+For more detailed usage and examples, please refer to example folder included in the package.
 
 # References
 
