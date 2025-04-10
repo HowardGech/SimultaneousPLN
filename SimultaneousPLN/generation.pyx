@@ -191,5 +191,5 @@ def generate_PLN(Omega, nsample=1, means=None, seed=None):
         means = np.zeros((nsample, nodes))
     X = np.random.multivariate_normal(np.zeros(nodes), np.linalg.inv(Omega), size=nsample) + means
     x_exp = np.exp(X)
-    y = np.random.poisson(x_exp)
+    y = np.random.poisson(x_exp).astype(float)
     return y

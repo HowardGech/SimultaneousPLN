@@ -18,7 +18,10 @@ RUN pip3 install jupyter \
     && pip3 install numpy \
     && pip3 install scipy \
     && pip3 install cython\
-    && pip3 install networkx
+    && pip3 install networkx\
+    && pip3 install pandas\
+    && pip3 install seaborn\
+    && pip3 install matplotlib
 
 COPY . .
 
