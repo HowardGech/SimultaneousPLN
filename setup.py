@@ -40,12 +40,7 @@ ext_modules = [
         "SimultaneousPLN._SPLN",
         sources=["SimultaneousPLN/simultaneous_pln.pyx"],
         include_dirs=include_dirs,
-    ),
-    Extension(
-        "SimultaneousPLN._generation",
-        sources=["SimultaneousPLN/generation.pyx"],
-        include_dirs=include_dirs,
-    ),
+    )
 ]
 
 setup(
