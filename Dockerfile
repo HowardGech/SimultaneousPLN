@@ -15,13 +15,13 @@ RUN apt-get update && apt-get install -y \
 RUN rm /usr/lib/python*/EXTERNALLY-MANAGED
 
 RUN pip3 install jupyter \
-    && pip3 install numpy \
-    && pip3 install scipy \
-    && pip3 install cython\
-    && pip3 install networkx\
-    && pip3 install pandas\
-    && pip3 install seaborn\
-    && pip3 install matplotlib
+    && pip3 install numpy==1.26.4 \
+    && pip3 install scipy==1.13.1\
+    && pip3 install cython==0.29.37\
+    && pip3 install networkx==3.1\
+    && pip3 install pandas==2.2.3\
+    && pip3 install seaborn==0.13.2\
+    && pip3 install matplotlib==3.9.1
 
 COPY . .
 
