@@ -88,6 +88,7 @@ def generate_graph(cgraph, graph, nodes=40, groups=10, seed=None, **kwargs):
     ----------
     A list of adjacency matrices of all graphs.
     """
+    seed_graphs = np.random.choice(1e5, groups, replace=False) if seed is not None else None
     A = [None]*groups
     kwargs_common = {'_'.join(key.split('_')[1:]): value for key, value in kwargs.items() if key.startswith('common_')}
     kwargs_group = {key: value for key, value in kwargs.items() if not key.startswith('common_')}
@@ -115,11 +116,11 @@ def generate_graph(cgraph, graph, nodes=40, groups=10, seed=None, **kwargs):
         Ac = cgraph(nodes, seed=seed, **kwargs_common)
     if graph_cat not in ['Hub', 'Block', 'Band']:
         for i in range(groups):
-            A[i] = nx.adjacency_matrix(graph(nodes, seed=(lambda: seed if not seed else seed+i)(), **kwargs_group)).todense() * Ac
+            A[i] = nx.adjacency_matrix(graph(nodes, seed=(lambda: seed if not seed else seed_graphs[i])(), **kwargs_group)).todense() * Ac
             np.fill_diagonal(A[i], 1)
     else:
         for i in range(groups):
-            A[i] = graph(nodes, seed=(lambda: seed if not seed else seed+i)(), **kwargs_group) * Ac
+            A[i] = graph(nodes, seed=(lambda: seed if not seed else seed_graphs[i])(), **kwargs_group) * Ac
             np.fill_diagonal(A[i], 1)
     return A
 

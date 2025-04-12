@@ -138,6 +138,7 @@ class SPLN:
         Gamma = np.zeros((p, p))
         Pen = np.zeros((p, p))
         err_prev = .0
+        len_print = 1
         while count <= max_iter:
             Omega_old = [np.copy(Omega[i]) for i in range(I)]
 
@@ -153,8 +154,10 @@ class SPLN:
 
             for j in range(I):
                 if verbose:
-                    print(' ' * 100, end="\r")
-                    print(f'Iteration {count}: calculating VEM on group {j+1}/{I}; error {err_prev:.2e}', end="\r")
+                    print(' ' * len_print, end="\r")
+                    str_print = f'Iteration {count}: calculating VEM on group {j+1}/{I}; error {err_prev:.2e}'
+                    len_print = len(str_print)
+                    print(str_print, end="\r")
                 ridge_inv[j] = np.linalg.inv(Omega[j] + rho * np.eye(Omega[j].shape[0]))
                 log_diff[j] = l[j] @ Omega[j]
                 if not parallel:
@@ -170,8 +173,10 @@ class SPLN:
                 # Update covariance matrix s and penalization term Penn_indi
                 sample_cov[j] = (mu[j] - l[j]).T @ (mu[j] - l[j]) / n_i[j] + np.diag(np.mean(sigma[j], axis=0))
                 Pen_list[j] = Pen/n_i[j]
-            print(' ' * 100, end="\r")
-            print(f'Iteration {count}: solving graphical Lasso; error {err_prev:.2e}', end="\r")
+            print(' ' * len_print, end="\r")
+            str_print = f'Iteration {count}: solving graphical Lasso; error {err_prev:.2e}'
+            len_print = len(str_print)
+            print(str_print, end="\r")
             if count == 0 or not keep_Omega:
                 for j in range(I):
                     Omega[j][:,:] = np.eye(p)
@@ -303,4 +308,5 @@ class SPLN:
             self.Omega = self.__omegas[index]
             self.beta = self.__betas[index]
             self.param = self.__params[index]
+        print('\n')
 
