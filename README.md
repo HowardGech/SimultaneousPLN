@@ -76,7 +76,7 @@ model.ModelSelect()
 ```
 
 # Example
-For more detailed usage and examples, please refer to example folder included in the package.
+For more detailed usage and examples, please refer to examples folder included in the package.
 
 # References
 
